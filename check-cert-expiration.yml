@@ -1,0 +1,23 @@
+---
+- name: Two week cert warning
+  hosts: localhost
+  connection: local
+  gather_facts: false
+  vars:
+    server: home.labdroid.net
+
+  tasks:
+    - name: Two week cert warning
+      shell: |
+        d=`echo | \
+            openssl s_client -servername {{ server }} -connect {{ server }}:443 2>/dev/null | \
+            openssl x509 -noout -dates | \
+            tail -n 1 | \
+            cut -d= -f2`
+        certsec=`date +%s -d "$d"`
+        nowsec=`date +%s`
+        days=`echo "($certsec-$nowsec) / (60*60*24)" | bc`
+        (($days<15))
+      delegate_to: localhost
+
+      
