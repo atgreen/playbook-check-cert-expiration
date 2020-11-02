@@ -17,7 +17,7 @@
         certsec=`date +%s -d "$d"`
         nowsec=`date +%s`
         days=`echo "$((($certsec-$nowsec)/(60*60*24)))"`
-        (($days<15))
+        (($days>14))
       delegate_to: localhost
 
       
